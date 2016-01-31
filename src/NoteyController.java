@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
@@ -20,15 +21,19 @@ public class NoteyController{
   private double dividerPosition;
   @FXML
 	private SplitPane mainViewPane;
-  private AnchorPane sidePane;
+  @FXML
+  private VBox sidePane;
 
   public void sidePaneVisibility(ActionEvent event){
   		if(!showSidePane){
         dividerPosition = mainViewPane.getDividerPositions()[0];
         mainViewPane.setDividerPositions(0.0);
+
+        sidePane.setVisible(false);
         showSidePane = true;
       }
       else{
+        sidePane.setVisible(true);
         mainViewPane.setDividerPositions(dividerPosition);
         showSidePane = false;
       }
