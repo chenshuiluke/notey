@@ -14,6 +14,7 @@ public class Notey extends Application{
 		Application.launch(args);
 	}
 	public void start(Stage primaryStage) throws IOException{
+			primaryStage.setTitle("Notey");
 			Parent root = null;
 			String sceneFile = "main.fxml";
 	    URL    url  = null;
