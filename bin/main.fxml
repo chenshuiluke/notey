@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
@@ -24,7 +25,12 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <TextArea maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="348.0" wrapText="true" />
+            <VBox maxHeight="1.7976931348623157E308">
+               <children>
+                  <TextField minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Name" />
+                  <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
          </items>
       </SplitPane>
    </children>
