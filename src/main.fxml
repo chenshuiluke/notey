@@ -8,14 +8,14 @@
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
    <children>
-      <SplitPane maxHeight="30.0" prefHeight="30.0">
+      <SplitPane maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
          <items>
             <Button fx:id="visibilityButton" mnemonicParsing="false" onAction="#sidePaneVisibility" text="=" />
          </items>
       </SplitPane>
       <SplitPane fx:id="mainViewPane" dividerPositions="0.18227424749163879" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="746.0" prefWidth="600.0">
          <items>
-            <ScrollPane fx:id="sidePane" fitToHeight="true" fitToWidth="true" minWidth="0.0" prefWidth="46.0" SplitPane.resizableWithParent="false">
+            <ScrollPane fx:id="sidePane" fitToHeight="true" fitToWidth="true" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="46.0">
                <content>
                   <VBox fx:id="sideButtonHolder" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="570.0" prefWidth="100.0">
                      <children>
