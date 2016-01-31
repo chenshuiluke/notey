@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
    <children>
@@ -15,11 +15,15 @@
       </SplitPane>
       <SplitPane fx:id="mainViewPane" dividerPositions="0.18227424749163879" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="746.0" prefWidth="600.0">
          <items>
-            <VBox fx:id="sidePane" minWidth="0.0" prefHeight="570.0" prefWidth="100.0">
-               <children>
-                  <Button maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" prefWidth="100.0" text="+" />
-               </children>
-            </VBox>
+            <ScrollPane fx:id="sidePane" fitToHeight="true" fitToWidth="true" minWidth="0.0" prefWidth="46.0" SplitPane.resizableWithParent="false">
+               <content>
+                  <VBox fx:id="sideButtonHolder" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="0.0" prefHeight="570.0" prefWidth="100.0">
+                     <children>
+                        <Button fx:id="addDocumentButton" maxWidth="1.7976931348623157E308" minWidth="0.0" mnemonicParsing="false" onAction="#addDocument" prefWidth="100.0" text="+" />
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
             <TextArea maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="348.0" wrapText="true" />
          </items>
       </SplitPane>
