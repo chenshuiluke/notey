@@ -28,7 +28,7 @@
             <VBox maxHeight="1.7976931348623157E308">
                <children>
                   <TextField minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Name" />
-                  <TextArea maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <TextArea fx:id="documentText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </items>

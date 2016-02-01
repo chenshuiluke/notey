@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
@@ -18,10 +19,12 @@ import javafx.fxml.FXML;
 import javax.annotation.Resources;
 import javafx.scene.control.Button;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 public class NoteyController{
 
   private boolean showSidePane;
-	private ArrayList<Button> buttonArr = new ArrayList<Button>();
+	private Map<Button, String> buttonMap = new HashMap<Button, String>();
   private double dividerPosition;
   @FXML
 	private SplitPane mainViewPane;
@@ -31,6 +34,8 @@ public class NoteyController{
 	private VBox sideButtonHolder;
 	@FXML
 	private Button addDocumentButton;
+	@FXML
+	private TextArea documentText;
 
 	public void addDocument(ActionEvent event){
 		System.out.println("Add document");
@@ -39,15 +44,34 @@ public class NoteyController{
 		newButton.setPrefWidth(addDocumentButton.getPrefWidth());
 		newButton.setMaxWidth(addDocumentButton.getMaxWidth());
 		newButton.setOnAction(e -> {
-			for(Button button : buttonArr){
-				if(button.isDisable()){
-					button.setDisable(false);
+			for(Map.Entry<Button, String> button : buttonMap.entrySet()){
+				if(button.getKey().isDisable()){
+					button.getKey().setDisable(false);
+					/*
+					System.out.println(button.getValue());
+					System.out.println(documentText.getText());
+					*/
+					button.setValue(documentText.getText());
 				}
+
 			}
 			System.out.println("Clicked");
 			Button temp = (Button)e.getSource();
+			if(buttonMap.containsKey(temp)){
+				if(!buttonMap.get(temp).equals("")){
+					System.out.println("Not equal empty");
+					System.out.println("button map content " + buttonMap.get(temp));
+					documentText.setText(buttonMap.get(temp));
+				}
+				else{
+					documentText.setText("");
+				}
+			}
+			else{
+				buttonMap.put(temp, "");
+				documentText.setText("");
+			}
 			temp.setDisable(true);
-			buttonArr.add(temp);
 		});
 		sideButtonHolder.getChildren().add(newButton);
 	}
