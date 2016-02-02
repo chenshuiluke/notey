@@ -14,27 +14,27 @@ public class Notey extends Application{
 		Application.launch(args);
 	}
 	public void start(Stage primaryStage) throws IOException{
-			primaryStage.setTitle("Notey");
-			Parent root = null;
-			String sceneFile = "main.fxml";
-	    URL    url  = null;
-	    try
-	    {
-				url  = getClass().getClassLoader().getResource( sceneFile );
-				root = FXMLLoader.load( url );
-				System.out.println( "  fxmlResource = " + sceneFile );
-				Scene scene = new Scene(root);
-				primaryStage.setScene(scene);
-				primaryStage.show();
-	    }
-	    catch ( Exception ex )
-	    {
-				System.out.println( "Exception on FXMLLoader.load()" );
-				System.out.println( "  * url: " + url );
-				System.out.println( "  * " + ex );
-				System.out.println( "    ----------------------------------------\n" );
-				throw ex;
-	    }
+        primaryStage.setTitle("Notey");
+        Parent root = null;
+        String sceneFile = "main.fxml";
+        URL url  = null;
+        try
+        {
+            url  = getClass().getClassLoader().getResource( sceneFile );
+            root = FXMLLoader.load( url );
+            System.out.println( "  fxmlResource = " + sceneFile );
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch(Exception ex)
+        {
+            System.out.println( "Exception on FXMLLoader.load()" );
+            System.out.println( "  * url: " + url );
+            System.out.println( "  * " + ex );
+            System.out.println( "    ----------------------------------------\n" );
+            throw ex;
+        }
 
 	}
 }
