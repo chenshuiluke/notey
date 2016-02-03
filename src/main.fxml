@@ -27,8 +27,8 @@
             </ScrollPane>
             <VBox maxHeight="1.7976931348623157E308">
                <children>
-                  <TextField minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Name" />
-                  <TextArea fx:id="documentText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
+                  <TextField fx:id="documentTitle" disable="true" minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Title" />
+                  <TextArea fx:id="documentText" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </items>

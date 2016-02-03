@@ -7,16 +7,19 @@ public class noteyDocument{
     private Button button;
     private String normalText;
     private String htmlText;
+    private String title;
 
     public noteyDocument(){
         button = null;
-        normalText = null;
-        htmlText = null;
+        normalText = "";
+        htmlText = "";
+        title = "";
     }
-    public noteyDocument(Button button, String normalText, String htmlText){
+    public noteyDocument(Button button, String normalText, String htmlText, String title){
         this.button = button;
         this.normalText = normalText;
         this.htmlText = htmlText;
+        this.title = title;
     }
 
     public void setButton(Button button){
@@ -28,6 +31,9 @@ public class noteyDocument{
     public void setHTMLText(String htmlText){
         this.htmlText = htmlText;
     }
+    public void setTitle(String title){
+        this.title = title;
+    }
 
     public Button getButton(){
         return button;
@@ -37,6 +43,9 @@ public class noteyDocument{
     }
     public String getHTMLText(){
         return htmlText;
+    }
+    public String getTitle(){
+        return title;
     }
     public void toggleButtonDisable(){
         button.setDisable(!button.isDisable());

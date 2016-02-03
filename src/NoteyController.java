@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 import java.io.IOException;
@@ -42,6 +43,8 @@ public class NoteyController{
     private Button addDocumentButton;
     @FXML
     private TextArea documentText;
+    @FXML
+    private TextField documentTitle;
 
     public void addDocument(ActionEvent event){
         System.out.println("Add document");
@@ -55,10 +58,15 @@ public class NoteyController{
                     System.out.println("Enabling");
                     document.toggleButtonDisable();
                     document.setNormalText(documentText.getText());
+                    document.setTitle(documentTitle.getText());
                 }
             }
+            if(documentTitle.isDisable() && documentText.isDisable()){
+                documentTitle.setDisable(false);
+                documentText.setDisable(false);
+            }
             System.out.println("Clicked");
-            noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "");
+            noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "", "");
             int index = noteyDocumentArr.indexOf(temp);
             if(index > -1){
                 noteyDocument tempDocument = noteyDocumentArr.get(index);
@@ -66,9 +74,11 @@ public class NoteyController{
                     System.out.println("button's normal text is not empty.");
                     System.out.println("button normal text:" + tempDocument.getNormalText());
                     documentText.setText(tempDocument.getNormalText());
+                    documentTitle.setText(tempDocument.getTitle());
                 }
                 else{
                     documentText.setText("");
+                    documentTitle.setText("");
                 }
             }
             else{
@@ -76,6 +86,7 @@ public class NoteyController{
                 //buttonMap.put(temp, "");
                 noteyDocumentArr.add(temp);
                 documentText.setText("");
+                documentTitle.setText("");
                 System.out.println("Not found");
             }
             temp.toggleButtonDisable();
