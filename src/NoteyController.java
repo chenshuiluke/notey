@@ -21,10 +21,15 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+
+import notey.noteyDocument;
 public class NoteyController{
 
     private boolean showSidePane;
     private Map<Button, String> buttonMap = new HashMap<Button, String>();
+
+    //Encapsulates a button and its associated documents
+    private ArrayList<noteyDocument> noteyDocumentArr = new ArrayList<>();
     private double dividerPosition;
 
     @FXML
@@ -45,34 +50,35 @@ public class NoteyController{
         newButton.setPrefWidth(addDocumentButton.getPrefWidth());
         newButton.setMaxWidth(addDocumentButton.getMaxWidth());
         newButton.setOnAction(e -> {
-            for(Map.Entry<Button, String> button : buttonMap.entrySet()){
-                if(button.getKey().isDisable()){
-                    button.getKey().setDisable(false);
-                    /*
-                    System.out.println(button.getValue());
-                    System.out.println(documentText.getText());
-                    */
-                    button.setValue(documentText.getText());
+            for(noteyDocument document : noteyDocumentArr){
+                if(document.getButton().isDisable()){
+                    System.out.println("Enabling");
+                    document.toggleButtonDisable();
+                    document.setNormalText(documentText.getText());
                 }
-
             }
             System.out.println("Clicked");
-            Button temp = (Button)e.getSource();
-            if(buttonMap.containsKey(temp)){
-                if(!buttonMap.get(temp).equals("")){
-                    System.out.println("Not equal empty");
-                    System.out.println("button map content " + buttonMap.get(temp));
-                    documentText.setText(buttonMap.get(temp));
+            noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "");
+            int index = noteyDocumentArr.indexOf(temp);
+            if(index > -1){
+                noteyDocument tempDocument = noteyDocumentArr.get(index);
+                if(!tempDocument.textEquals("")){
+                    System.out.println("button's normal text is not empty.");
+                    System.out.println("button normal text:" + tempDocument.getNormalText());
+                    documentText.setText(tempDocument.getNormalText());
                 }
                 else{
                     documentText.setText("");
                 }
             }
             else{
-                buttonMap.put(temp, "");
+                //If the document isn't found
+                //buttonMap.put(temp, "");
+                noteyDocumentArr.add(temp);
                 documentText.setText("");
+                System.out.println("Not found");
             }
-            temp.setDisable(true);
+            temp.toggleButtonDisable();
         });
         sideButtonHolder.getChildren().add(newButton);
     }
