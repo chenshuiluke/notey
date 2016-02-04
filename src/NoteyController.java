@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.FileWriter;
+import java.io.FileReader;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
@@ -99,14 +101,25 @@ public class NoteyController{
 
                 new File("notes").mkdir();
                 String validChars = "(\\W)";
-                File output = new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".txt");
+                File output;
+                if(document.getTitle().length()>10){
+                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".txt");
+                }
+                else{
+                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".txt");
+                }
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getNormalText());
                 }
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
-                output = new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".html");
+                if(document.getTitle().length()>10){
+                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".html");
+                }
+                else{
+                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".html");
+                }
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getHTMLText());
                 }
@@ -144,8 +157,9 @@ public class NoteyController{
         WebEngine engine = box.getEngine();
         engine.loadContent(content);
     }
-    public void addDocument(ActionEvent event){
-        System.out.println("Add document");
+    private static Button setUpNoteyButton(TextArea documentText, TextField documentTitle,
+    Button addDocumentButton, Button saveButton, Button saveAllButton, WebView webViewBox,
+    String text, String title){
         Button newButton = new Button("Document");
         newButton.setMinWidth(0);
         newButton.setPrefWidth(addDocumentButton.getPrefWidth());
@@ -161,7 +175,8 @@ public class NoteyController{
                 saveAllButton.setDisable(false);
             }
             System.out.println("Clicked");
-            noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "", "");
+            noteyDocument temp = new noteyDocument((Button)e.getSource(), text, "", title);
+            temp.convertDocumentToHTML();
             int index = noteyDocumentArr.indexOf(temp);
 
             boolean buttonFoundInArray = index > -1;
@@ -188,13 +203,53 @@ public class NoteyController{
                 */
                 loadIntoWebView(temp.getHTMLText(), webViewBox);
                 noteyDocumentArr.add(temp);
-                documentText.setText("");
-                documentTitle.setText("");
+                documentText.setText(text);
+                documentTitle.setText(title);
+                newButton.setText(title);
                 System.out.println("Not found");
             }
             temp.toggleButtonDisable();
         });
+        documentText.setText(text);
+        documentTitle.setText(title);
+        newButton.setText(title);
+        return newButton;
+
+    }
+    public void addDocument(ActionEvent event){
+        System.out.println("Add document");
+        Button newButton = setUpNoteyButton(documentText, documentTitle,
+        addDocumentButton, saveButton, saveAllButton, webViewBox, "", "Document");
         sideButtonHolder.getChildren().add(newButton);
+    }
+    private static void loadExistingNotes(VBox sideButtonHolder, TextArea documentText,
+        TextField documentTitle, Button addDocumentButton, Button saveButton, Button saveAllButton,
+        WebView webViewBox){
+        File notesDir = new File("notes");
+        String[] notes = notesDir.list();
+        for(String note : notes){
+            //System.out.println(note.substring(note.length() - 4, note.length()));
+            System.out.println(note);
+            if(note.substring(note.length() - 4, note.length()).equals(".txt")){
+                System.out.println("In here");
+                File inputFile = new File("notes/" + note);
+                try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
+                    String text = new String();
+                    String title = inputFile.getName();
+                    String line;
+                    while((line = reader.readLine()) != null){
+                        text+=line + System.getProperty("line.separator");
+                    }
+                    System.out.println(text);
+                    Button newButton = setUpNoteyButton(documentText, documentTitle,
+                    addDocumentButton, saveButton, saveAllButton, webViewBox, text, title);
+                    sideButtonHolder.getChildren().add(newButton);
+                }
+                catch(IOException io_exc){
+                    System.out.println(io_exc);
+                }
+            }
+        }
     }
     public void sidePaneVisibility(ActionEvent event){
         if(!showSidePane){
@@ -210,8 +265,11 @@ public class NoteyController{
             showSidePane = false;
         }
     }
-    public void initialize(URL location, Resources resources){
+    @FXML
+    public void initialize(){
         showSidePane = true;
+        loadExistingNotes(sideButtonHolder, documentText, documentTitle,
+        addDocumentButton, saveButton, saveAllButton, webViewBox);
         System.out.println("initialized");
     }
 }
