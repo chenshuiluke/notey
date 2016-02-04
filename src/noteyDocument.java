@@ -72,4 +72,35 @@ public class noteyDocument{
     public boolean textEquals(String normalText){
         return this.normalText == normalText;
     }
+    public void convertDocumentToHTML(){
+        String[] lines = normalText.split(System.getProperty("line.separator"));
+        String[] docSyntax = {"HEADING", "IMAGE"};
+        String[] htmlSyntax = {"<h1>", "<img src='"};
+        String[] htmlEndSyntax = {"</h1>", "'/>"};
+
+        htmlText = "<html>\n";
+        for(String line : lines){
+            boolean matched = false;
+            int counter = 0;
+            for(String tag : docSyntax){
+                if(line.length() > tag.length() + 1 && line.substring(0, tag.length()).equals(tag)){
+                    //System.out.println("Matched");
+                    htmlText+=htmlSyntax[counter];
+                    htmlText+=line.substring(tag.length() + 1, line.length());
+                    htmlText+=htmlEndSyntax[counter];
+                    matched = true;
+                    break;
+                }
+                counter++;
+            }
+            if(!matched){
+                htmlText+="<p>";
+                htmlText+=line.substring(0, line.length());
+                htmlText+="</p>";
+            }
+            System.out.println(line);
+        }
+        htmlText += "</html>";
+        System.out.println(htmlText);
+    }
 }

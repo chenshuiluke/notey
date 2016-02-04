@@ -56,13 +56,21 @@ public class NoteyController{
                 document.setNormalText(documentText.getText());
                 document.setTitle(documentTitle.getText());
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
+                document.convertDocumentToHTML();
                 if(notEmptyDocTitle)
                     document.setButtonText(document.getTitle());
 
                 new File("notes").mkdir();
-                File output = new File("notes/" + document.getTitle());
+                File output = new File("notes/" + document.getTitle() + ".txt");
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getNormalText());
+                }
+                catch(IOException io_exc){
+                    System.out.println(io_exc);
+                }
+                output = new File("notes/" + document.getTitle() + ".html");
+                try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
+                    writer.write(document.getHTMLText());
                 }
                 catch(IOException io_exc){
                     System.out.println(io_exc);
