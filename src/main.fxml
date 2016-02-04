@@ -11,10 +11,11 @@
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
    <children>
-      <SplitPane dividerPositions="0.5, 0.5" maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
+      <SplitPane dividerPositions="0.5, 0.5, 0.5" maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
          <items>
             <Button fx:id="visibilityButton" mnemonicParsing="false" onAction="#sidePaneVisibility" text="=" />
             <Button fx:id="saveButton" disable="true" mnemonicParsing="false" onAction="#saveDocumentOnClick" text="Save" />
+            <Button fx:id="saveAllButton" disable="true" mnemonicParsing="false" onAction="#saveAllDocumentsOnClick" text="Save All" />
             <ToggleButton fx:id="toggleWebViewButton" mnemonicParsing="false" onAction="#toggleWebView" text="View" />
          </items>
       </SplitPane>
@@ -31,7 +32,7 @@
             </ScrollPane>
             <VBox maxHeight="1.7976931348623157E308">
                <children>
-                  <WebView fx:id="webViewBox" prefHeight="0.0" prefWidth="0.0" visible="false" VBox.vgrow="SOMETIMES" />
+                  <WebView fx:id="webViewBox" prefHeight="0.0" prefWidth="0.0" visible="false" />
                   <TextField fx:id="documentTitle" disable="true" minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Title" />
                   <TextArea fx:id="documentText" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
                </children>

@@ -83,13 +83,17 @@ public class noteyDocument{
             boolean matched = false;
             int counter = 0;
             for(String tag : docSyntax){
-                if(line.length() > tag.length() + 1 && line.substring(0, tag.length()).equals(tag)){
-                    //System.out.println("Matched");
-                    htmlText+=htmlSyntax[counter];
-                    htmlText+=line.substring(tag.length() + 1, line.length());
-                    htmlText+=htmlEndSyntax[counter];
-                    matched = true;
-                    break;
+                if(line.length() > tag.length() + 1 ){
+                    String evaluate = line.substring(0, tag.length());
+                    if(evaluate.equals(tag) ||
+                        evaluate.equals(tag.toLowerCase())){
+                        //System.out.println("Matched");
+                        htmlText+=htmlSyntax[counter];
+                        htmlText+=line.substring(tag.length() + 1, line.length());
+                        htmlText+=htmlEndSyntax[counter];
+                        matched = true;
+                        break;
+                    }
                 }
                 counter++;
             }

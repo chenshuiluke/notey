@@ -53,6 +53,8 @@ public class NoteyController{
     @FXML
     private Button saveButton;
     @FXML
+    private Button saveAllButton;
+    @FXML
     private ToggleButton toggleWebViewButton;
     @FXML
     private WebView webViewBox;
@@ -73,20 +75,24 @@ public class NoteyController{
             webViewBox.setPrefWidth(5000);
             webViewBox.setPrefHeight(5000);
             WebEngine engine = webViewBox.getEngine();
-            System.out.println("Loading " + saveDocument(documentText, documentTitle));
-            engine.loadContent(saveDocument(documentText, documentTitle));
+            System.out.println("Loading " + saveDocument(documentText, documentTitle, false));
+            engine.loadContent(saveDocument(documentText, documentTitle, false));
         }
     }
-    private static String saveDocument(TextArea dText, TextField dTitle){
+    private static String saveDocument(TextArea dText, TextField dTitle, boolean all){
         String result = new String();
         for(noteyDocument document : noteyDocumentArr){
-            if(document.getButton().isDisable()){
-                document.setNormalText(dText.getText());
-                document.setTitle(dTitle.getText());
+            if(all || document.getButton().isDisable()){
+                if(document.getButton().isDisable()){
+                    document.setNormalText(dText.getText());
+                    document.setTitle(dTitle.getText());
+                }
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
                 document.convertDocumentToHTML();
                 if(notEmptyDocTitle)
                     document.setButtonText(document.getTitle());
+                else
+                    continue;
 
                 new File("notes").mkdir();
                 String validChars = "(\\W)";
@@ -104,13 +110,17 @@ public class NoteyController{
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
-                result = document.getHTMLText();
+                if(!all)
+                    result = document.getHTMLText();
             }
         }
         return result;
     }
     public void saveDocumentOnClick(){
-        saveDocument(documentText, documentTitle);
+        saveDocument(documentText, documentTitle, false);
+    }
+    public void saveAllDocumentsOnClick(){
+        saveDocument(documentText, documentTitle, true);
     }
     private static void searchForDisabledDocumentInArr(TextArea dText, TextField dTitle){
         //Enables any disabled buttons. Should find only one.
@@ -145,6 +155,7 @@ public class NoteyController{
                 documentTitle.setDisable(false);
                 documentText.setDisable(false);
                 saveButton.setDisable(false);
+                saveAllButton.setDisable(false);
             }
             System.out.println("Clicked");
             noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "", "");
@@ -187,11 +198,11 @@ public class NoteyController{
             dividerPosition = mainViewPane.getDividerPositions()[0];
             mainViewPane.setDividerPositions(0.0);
 
-            sidePane.setVisible(false);
+            //sidePane.setVisible(false);
             showSidePane = true;
         }
         else{
-            sidePane.setVisible(true);
+            //sidePane.setVisible(true);
             mainViewPane.setDividerPositions(dividerPosition);
             showSidePane = false;
         }
