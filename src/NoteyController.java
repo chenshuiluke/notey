@@ -72,8 +72,8 @@ public class NoteyController{
             webViewBox.setVisible(true);
             documentText.setVisible(false);
             documentTitle.setVisible(false);
-            webViewBox.setPrefWidth(5000);
-            webViewBox.setPrefHeight(5000);
+            webViewBox.setPrefWidth(1000);
+            webViewBox.setPrefHeight(1000);
             WebEngine engine = webViewBox.getEngine();
             System.out.println("Loading " + saveDocument(documentText, documentTitle, false));
             engine.loadContent(saveDocument(documentText, documentTitle, false));
@@ -85,8 +85,10 @@ public class NoteyController{
             if(all || document.getButton().isDisable()){
                 if(document.getButton().isDisable()){
                     document.setNormalText(dText.getText());
-                    document.setTitle(dTitle.getText());
-                    document.setButtonText(document.getTitle());
+                    if(dTitle.getText().length() > 0 && dText.getText().length() > 0){
+                        document.setTitle(dTitle.getText());
+                        document.setButtonText(document.getTitle());
+                    }
                 }
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
                 document.convertDocumentToHTML();
