@@ -34,6 +34,9 @@ public class noteyDocument{
     public void setTitle(String title){
         this.title = title;
     }
+    public void setButtonText(String title){
+        button.setText(title);
+    }
 
     public Button getButton(){
         return button;
@@ -46,6 +49,9 @@ public class noteyDocument{
     }
     public String getTitle(){
         return title;
+    }
+    public String getButtonText(){
+        return button.getText();
     }
     public void toggleButtonDisable(){
         button.setDisable(!button.isDisable());

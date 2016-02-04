@@ -59,8 +59,11 @@ public class NoteyController{
                     document.toggleButtonDisable();
                     document.setNormalText(documentText.getText());
                     document.setTitle(documentTitle.getText());
+                    if(!document.getTitle().equals(""))
+                        document.setButtonText(document.getTitle());
                 }
             }
+            documentTitle.setText("");
             if(documentTitle.isDisable() && documentText.isDisable()){
                 documentTitle.setDisable(false);
                 documentText.setDisable(false);
@@ -74,7 +77,8 @@ public class NoteyController{
                     System.out.println("button's normal text is not empty.");
                     System.out.println("button normal text:" + tempDocument.getNormalText());
                     documentText.setText(tempDocument.getNormalText());
-                    documentTitle.setText(tempDocument.getTitle());
+                    if(!tempDocument.getTitle().equals(""))
+                        documentTitle.setText(tempDocument.getTitle());
                 }
                 else{
                     documentText.setText("");
