@@ -98,9 +98,9 @@ public class noteyDocument{
                 counter++;
             }
             if(!matched){
-                htmlText+="<pre>";
+                htmlText+="<p>";
                 htmlText+=line.substring(0, line.length());
-                htmlText+="</pre>";
+                htmlText+="</p>";
             }
             System.out.println(line);
         }
