@@ -19,12 +19,15 @@ import java.net.URL;
 import javafx.fxml.FXML;
 import javax.annotation.Resources;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 import notey.noteyDocument;
 public class NoteyController{
@@ -49,12 +52,37 @@ public class NoteyController{
     private TextField documentTitle;
     @FXML
     private Button saveButton;
+    @FXML
+    private ToggleButton toggleWebViewButton;
+    @FXML
+    private WebView webViewBox;
+    private boolean buttonIsSelected;
 
-    public void saveDocument(){
+    public void toggleWebView(){
+        if(webViewBox.isVisible()){
+            webViewBox.setVisible(false);
+            documentText.setVisible(true);
+            documentTitle.setVisible(true);
+            webViewBox.setPrefWidth(0);
+            webViewBox.setPrefHeight(0);
+        }
+        else{
+            webViewBox.setVisible(true);
+            documentText.setVisible(false);
+            documentTitle.setVisible(false);
+            webViewBox.setPrefWidth(5000);
+            webViewBox.setPrefHeight(5000);
+            WebEngine engine = webViewBox.getEngine();
+            System.out.println("Loading " + saveDocument(documentText, documentTitle));
+            engine.loadContent(saveDocument(documentText, documentTitle));
+        }
+    }
+    private static String saveDocument(TextArea dText, TextField dTitle){
+        String result = new String();
         for(noteyDocument document : noteyDocumentArr){
             if(document.getButton().isDisable()){
-                document.setNormalText(documentText.getText());
-                document.setTitle(documentTitle.getText());
+                document.setNormalText(dText.getText());
+                document.setTitle(dTitle.getText());
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
                 document.convertDocumentToHTML();
                 if(notEmptyDocTitle)
@@ -75,8 +103,13 @@ public class NoteyController{
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
+                result = document.getHTMLText();
             }
         }
+        return result;
+    }
+    public void saveDocumentOnClick(){
+        saveDocument(documentText, documentTitle);
     }
     private static void searchForDisabledDocumentInArr(TextArea dText, TextField dTitle){
         //Enables any disabled buttons. Should find only one.
@@ -92,6 +125,10 @@ public class NoteyController{
                 break;
             }
         }
+    }
+    private static void loadIntoWebView(String content, WebView box){
+        WebEngine engine = box.getEngine();
+        engine.loadContent(content);
     }
     public void addDocument(ActionEvent event){
         System.out.println("Add document");
@@ -118,6 +155,7 @@ public class NoteyController{
                 if(!tempDocument.textEquals("")){
                     System.out.println("button's normal text is not empty.");
                     System.out.println("button normal text:" + tempDocument.getNormalText());
+                    loadIntoWebView(tempDocument.getHTMLText(), webViewBox);
                     documentText.setText(tempDocument.getNormalText());
                     if(!tempDocument.getTitle().equals(""))
                         documentTitle.setText(tempDocument.getTitle());
@@ -133,6 +171,7 @@ public class NoteyController{
                 blank document to the array and clear
                 the title box and text box
                 */
+                loadIntoWebView(temp.getHTMLText(), webViewBox);
                 noteyDocumentArr.add(temp);
                 documentText.setText("");
                 documentTitle.setText("");

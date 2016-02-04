@@ -5,14 +5,17 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
    <children>
-      <SplitPane dividerPositions="0.5" maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
+      <SplitPane dividerPositions="0.5, 0.5" maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
          <items>
             <Button fx:id="visibilityButton" mnemonicParsing="false" onAction="#sidePaneVisibility" text="=" />
-            <Button fx:id="saveButton" disable="true" mnemonicParsing="false" onAction="#saveDocument" text="Save" />
+            <Button fx:id="saveButton" disable="true" mnemonicParsing="false" onAction="#saveDocumentOnClick" text="Save" />
+            <ToggleButton fx:id="toggleWebViewButton" mnemonicParsing="false" onAction="#toggleWebView" text="View" />
          </items>
       </SplitPane>
       <SplitPane fx:id="mainViewPane" dividerPositions="0.18227424749163879" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="746.0" prefWidth="600.0">
@@ -28,6 +31,7 @@
             </ScrollPane>
             <VBox maxHeight="1.7976931348623157E308">
                <children>
+                  <WebView fx:id="webViewBox" prefHeight="0.0" prefWidth="0.0" visible="false" VBox.vgrow="SOMETIMES" />
                   <TextField fx:id="documentTitle" disable="true" minWidth="0.0" prefHeight="26.0" prefWidth="482.0" promptText="Document Title" />
                   <TextArea fx:id="documentText" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="542.0" prefWidth="485.0" wrapText="true" VBox.vgrow="ALWAYS" />
                </children>

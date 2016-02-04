@@ -75,7 +75,7 @@ public class noteyDocument{
     public void convertDocumentToHTML(){
         String[] lines = normalText.split(System.getProperty("line.separator"));
         String[] docSyntax = {"HEADING", "IMAGE"};
-        String[] htmlSyntax = {"<h1>", "<img src='"};
+        String[] htmlSyntax = {"<h1>", "<img height='400px' width='400px' src='"};
         String[] htmlEndSyntax = {"</h1>", "'/>"};
 
         htmlText = "<html>\n";
