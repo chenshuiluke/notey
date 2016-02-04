@@ -87,7 +87,7 @@ public class NoteyController{
             if(all || document.getButton().isDisable()){
                 if(document.getButton().isDisable()){
                     document.setNormalText(dText.getText());
-                    if(dTitle.getText().length() > 0 && dText.getText().length() > 0){
+                    if(!dTitle.getText().equals("Document") && !dText.getText().equals("")){
                         document.setTitle(dTitle.getText());
                         document.setButtonText(document.getTitle());
                     }
@@ -102,22 +102,28 @@ public class NoteyController{
                 new File("notes").mkdir();
                 String validChars = "(\\W)";
                 File output;
+				String validated; 
                 if(document.getTitle().length()>10){
-                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".txt");
+					validated = document.getTitle().replaceAll(validChars, "").substring(0, 10);
+                    output= new File("notes/" + validated + ".txt");
                 }
                 else{
-                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".txt");
+					validated = document.getTitle().replaceAll(validChars, "");
+                    output= new File("notes/" + validated + ".txt");
                 }
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
+					System.out.println("Writing " + document.getNormalText() + " to " + validated);
                     writer.write(document.getNormalText());
                 }
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
                 if(document.getTitle().length()>10){
-                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".html");
+					validated = document.getTitle().replaceAll(validChars, "").substring(0, 10);
+                    output= new File("notes/" + validated + ".html");
                 }
                 else{
+					validated = document.getTitle().replaceAll(validChars, "");
                     output= new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".html");
                 }
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
@@ -144,11 +150,15 @@ public class NoteyController{
             if(document.getButton().isDisable()){
                 System.out.println("Enabling");
                 document.toggleButtonDisable();
-                document.setNormalText(dText.getText());
-                document.setTitle(dTitle.getText());
-                boolean notEmptyDocTitle = !document.getTitle().equals("");
-                if(notEmptyDocTitle)
+                boolean notEmptyDocTitleAndText = !document.getTitle().equals("") && !document.getNormalText().equals("");
+                if(notEmptyDocTitleAndText){
                     document.setButtonText(document.getTitle());
+				}
+				else{
+             	  	document.setNormalText(dText.getText());
+               		document.setTitle(dTitle.getText());
+				}
+
                 break;
             }
         }
@@ -236,6 +246,13 @@ public class NoteyController{
                 try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
                     String text = new String();
                     String title = inputFile.getName();
+					if(title.substring(title.length() - 5, title.length()).equals(".html")){
+						title = title.substring(0, title.length() - 5);
+					}
+					else if(title.substring(title.length() - 4, title.length()).equals(".txt")){
+						title = title.substring(0, title.length() - 4);
+					}
+					System.out.println("New title: " + title);
                     String line;
                     while((line = reader.readLine()) != null){
                         text+=line + System.getProperty("line.separator");
