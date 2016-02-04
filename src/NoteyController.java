@@ -86,6 +86,7 @@ public class NoteyController{
                 if(document.getButton().isDisable()){
                     document.setNormalText(dText.getText());
                     document.setTitle(dTitle.getText());
+                    document.setButtonText(document.getTitle());
                 }
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
                 document.convertDocumentToHTML();

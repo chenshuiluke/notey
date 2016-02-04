@@ -78,7 +78,7 @@ public class noteyDocument{
         String[] htmlSyntax = {"<h1>", "<img height='400px' width='400px' src='"};
         String[] htmlEndSyntax = {"</h1>", "'/>"};
 
-        htmlText = "<html>\n";
+        htmlText = "<html>\n<body>";
         for(String line : lines){
             boolean matched = false;
             int counter = 0;
@@ -98,13 +98,13 @@ public class noteyDocument{
                 counter++;
             }
             if(!matched){
-                htmlText+="<p>";
+                htmlText+="<pre>";
                 htmlText+=line.substring(0, line.length());
-                htmlText+="</p>";
+                htmlText+="</pre>";
             }
             System.out.println(line);
         }
-        htmlText += "</html>";
+        htmlText += "</body></html>";
         System.out.println(htmlText);
     }
 }
