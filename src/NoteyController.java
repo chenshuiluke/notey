@@ -22,6 +22,9 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 import notey.noteyDocument;
 public class NoteyController{
@@ -44,7 +47,29 @@ public class NoteyController{
     private TextArea documentText;
     @FXML
     private TextField documentTitle;
+    @FXML
+    private Button saveButton;
 
+    public void saveDocument(){
+        for(noteyDocument document : noteyDocumentArr){
+            if(document.getButton().isDisable()){
+                document.setNormalText(documentText.getText());
+                document.setTitle(documentTitle.getText());
+                boolean notEmptyDocTitle = !document.getTitle().equals("");
+                if(notEmptyDocTitle)
+                    document.setButtonText(document.getTitle());
+
+                new File("notes").mkdir();
+                File output = new File("notes/" + document.getTitle());
+                try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
+                    writer.write(document.getNormalText());
+                }
+                catch(IOException io_exc){
+                    System.out.println(io_exc);
+                }
+            }
+        }
+    }
     private static void searchForDisabledDocumentInArr(TextArea dText, TextField dTitle){
         //Enables any disabled buttons. Should find only one.
         for(noteyDocument document : noteyDocumentArr){
@@ -69,10 +94,11 @@ public class NoteyController{
         newButton.setOnAction(e -> {
             searchForDisabledDocumentInArr(documentText, documentTitle);
             documentTitle.setText(""); //Clears it on each button press
-            if(documentTitle.isDisable() && documentText.isDisable()){
+            if(documentTitle.isDisable() && documentText.isDisable() && saveButton.isDisable()){
                 //Enables the document title box and text box on the first button click
                 documentTitle.setDisable(false);
                 documentText.setDisable(false);
+                saveButton.setDisable(false);
             }
             System.out.println("Clicked");
             noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "", "");

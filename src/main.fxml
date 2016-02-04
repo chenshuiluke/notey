@@ -9,9 +9,10 @@
 
 <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="notey.NoteyController">
    <children>
-      <SplitPane maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
+      <SplitPane dividerPositions="0.5" maxHeight="30.0" maxWidth="1.7976931348623157E308" prefHeight="30.0">
          <items>
             <Button fx:id="visibilityButton" mnemonicParsing="false" onAction="#sidePaneVisibility" text="=" />
+            <Button fx:id="saveButton" disable="true" mnemonicParsing="false" onAction="#saveDocument" text="Save" />
          </items>
       </SplitPane>
       <SplitPane fx:id="mainViewPane" dividerPositions="0.18227424749163879" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="746.0" prefWidth="600.0">
