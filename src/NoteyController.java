@@ -27,10 +27,9 @@ import notey.noteyDocument;
 public class NoteyController{
 
     private boolean showSidePane;
-    private Map<Button, String> buttonMap = new HashMap<Button, String>();
 
     //Encapsulates a button and its associated documents
-    private ArrayList<noteyDocument> noteyDocumentArr = new ArrayList<>();
+    private static ArrayList<noteyDocument> noteyDocumentArr = new ArrayList<>();
     private double dividerPosition;
 
     @FXML
@@ -46,6 +45,21 @@ public class NoteyController{
     @FXML
     private TextField documentTitle;
 
+    private static void searchForDisabledDocumentInArr(TextArea dText, TextField dTitle){
+        //Enables any disabled buttons. Should find only one.
+        for(noteyDocument document : noteyDocumentArr){
+            if(document.getButton().isDisable()){
+                System.out.println("Enabling");
+                document.toggleButtonDisable();
+                document.setNormalText(dText.getText());
+                document.setTitle(dTitle.getText());
+                boolean notEmptyDocTitle = !document.getTitle().equals("");
+                if(notEmptyDocTitle)
+                    document.setButtonText(document.getTitle());
+                break;
+            }
+        }
+    }
     public void addDocument(ActionEvent event){
         System.out.println("Add document");
         Button newButton = new Button("Document");
@@ -53,25 +67,19 @@ public class NoteyController{
         newButton.setPrefWidth(addDocumentButton.getPrefWidth());
         newButton.setMaxWidth(addDocumentButton.getMaxWidth());
         newButton.setOnAction(e -> {
-            for(noteyDocument document : noteyDocumentArr){
-                if(document.getButton().isDisable()){
-                    System.out.println("Enabling");
-                    document.toggleButtonDisable();
-                    document.setNormalText(documentText.getText());
-                    document.setTitle(documentTitle.getText());
-                    if(!document.getTitle().equals(""))
-                        document.setButtonText(document.getTitle());
-                }
-            }
-            documentTitle.setText("");
+            searchForDisabledDocumentInArr(documentText, documentTitle);
+            documentTitle.setText(""); //Clears it on each button press
             if(documentTitle.isDisable() && documentText.isDisable()){
+                //Enables the document title box and text box on the first button click
                 documentTitle.setDisable(false);
                 documentText.setDisable(false);
             }
             System.out.println("Clicked");
             noteyDocument temp = new noteyDocument((Button)e.getSource(), "", "", "");
             int index = noteyDocumentArr.indexOf(temp);
-            if(index > -1){
+
+            boolean buttonFoundInArray = index > -1;
+            if(buttonFoundInArray){
                 noteyDocument tempDocument = noteyDocumentArr.get(index);
                 if(!tempDocument.textEquals("")){
                     System.out.println("button's normal text is not empty.");
@@ -86,8 +94,11 @@ public class NoteyController{
                 }
             }
             else{
-                //If the document isn't found
-                //buttonMap.put(temp, "");
+                /*
+                If the document isn't found, add the
+                blank document to the array and clear
+                the title box and text box
+                */
                 noteyDocumentArr.add(temp);
                 documentText.setText("");
                 documentTitle.setText("");
