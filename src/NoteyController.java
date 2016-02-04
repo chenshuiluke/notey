@@ -72,8 +72,8 @@ public class NoteyController{
             webViewBox.setVisible(true);
             documentText.setVisible(false);
             documentTitle.setVisible(false);
-            webViewBox.setPrefWidth(1000);
-            webViewBox.setPrefHeight(1000);
+            webViewBox.setPrefWidth(1500);
+            webViewBox.setPrefHeight(1500);
             WebEngine engine = webViewBox.getEngine();
             System.out.println("Loading " + saveDocument(documentText, documentTitle, false));
             engine.loadContent(saveDocument(documentText, documentTitle, false));
@@ -99,14 +99,14 @@ public class NoteyController{
 
                 new File("notes").mkdir();
                 String validChars = "(\\W)";
-                File output = new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".txt");
+                File output = new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".txt");
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getNormalText());
                 }
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
-                output = new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".html");
+                output = new File("notes/" + document.getTitle().replaceAll(validChars, "").substring(0, 10) + ".html");
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getHTMLText());
                 }
