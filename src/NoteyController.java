@@ -89,14 +89,15 @@ public class NoteyController{
                     document.setButtonText(document.getTitle());
 
                 new File("notes").mkdir();
-                File output = new File("notes/" + document.getTitle() + ".txt");
+                String validChars = "(\\W)";
+                File output = new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".txt");
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getNormalText());
                 }
                 catch(IOException io_exc){
                     System.out.println(io_exc);
                 }
-                output = new File("notes/" + document.getTitle() + ".html");
+                output = new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".html");
                 try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
                     writer.write(document.getHTMLText());
                 }
