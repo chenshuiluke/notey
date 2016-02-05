@@ -229,33 +229,35 @@ public class NoteyController{
         WebView webViewBox){
         File notesDir = new File("notes");
         String[] notes = notesDir.list();
-        for(String note : notes){
-            //System.out.println(note.substring(note.length() - 4, note.length()));
-            System.out.println(note);
-            String fileExtension = note.substring(note.length() - 4, note.length());
-            if(fileExtension.equals(".txt")){
-                System.out.println("In here");
-                File inputFile = new File("notes/" + note);
-                try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
-                    String text = new String();
-                    String title = inputFile.getName();
-                    String titleWithoutExtension = title.substring(0, title.length() - 4);
-					System.out.println("New title: " + titleWithoutExtension);
-                    String line;
-                    while((line = reader.readLine()) != null){
-                        text+=line + System.getProperty("line.separator");
+	    if(notes != null){
+            for(String note : notes){
+                //System.out.println(note.substring(note.length() - 4, note.length()));
+                System.out.println(note);
+                String fileExtension = note.substring(note.length() - 4, note.length());
+                if(fileExtension.equals(".txt")){
+                    System.out.println("In here");
+                    File inputFile = new File("notes/" + note);
+                    try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
+                        String text = new String();
+                        String title = inputFile.getName();
+                        String titleWithoutExtension = title.substring(0, title.length() - 4);
+					    System.out.println("New title: " + titleWithoutExtension);
+                        String line;
+                        while((line = reader.readLine()) != null){
+                            text+=line + System.getProperty("line.separator");
+                        }
+                        System.out.println(text);
+                        Button newButton = setUpNoteyButton(documentText, documentTitle,
+                            addDocumentButton, saveButton, saveAllButton, webViewBox, text,
+                            titleWithoutExtension);
+                        sideButtonHolder.getChildren().add(newButton);
                     }
-                    System.out.println(text);
-                    Button newButton = setUpNoteyButton(documentText, documentTitle,
-                        addDocumentButton, saveButton, saveAllButton, webViewBox, text,
-                        titleWithoutExtension);
-                    sideButtonHolder.getChildren().add(newButton);
-                }
-                catch(IOException io_exc){
-                    System.out.println(io_exc);
+                    catch(IOException io_exc){
+                        System.out.println(io_exc);
+                    }
                 }
             }
-        }
+    	}
     }
     public void sidePaneVisibility(ActionEvent event){
         if(!showSidePane){
