@@ -2,6 +2,7 @@ notey - a note storage program
 =
 Introduction
 -
+[![YouTube Video](http://i.imgur.com/qG1rujb.png)](https://www.youtube.com/watch?v=McPKkb7Whps)
 ![Screenshot of notey displaying information about Google Chrome](http://i.imgur.com/6Ne8DMe.png)
 Notey is a simple note storage program written in Java and JavaFX. It currently supports local notes, which can contain:
 * regular text
