@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 import java.net.URL;
 import javafx.fxml.FXML;
@@ -15,13 +16,13 @@ import java.io.*;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import notey.noteyDocument;
+import notey.NoteyDocument;
 public class NoteyController{
 
     private boolean showSidePane;
 
     //Encapsulates a button and its associated documents
-    private static ArrayList<noteyDocument> noteyDocumentArr = new ArrayList<>();
+    private static ArrayList<NoteyDocument> noteyDocumentArr = new ArrayList<>();
     private double dividerPosition;
 
     @FXML
@@ -65,16 +66,47 @@ public class NoteyController{
             engine.loadContent(saveDocument(documentText, documentTitle, false));
         }
     }
-    private static String saveDocument(TextArea dText, TextField dTitle, boolean all){
+    private static void writeTextAndHTMLToFile(String text, String html, String title){
+        try{
+            File output;
+            String validated;
+            String validChars = "(\\W)";
+            if(title.length()>10){
+				validated = title.replaceAll(validChars, "").substring(0, 10);
+                output= new File("notes/" + validated + ".txt");
+            }
+            else{
+				validated = title.replaceAll(validChars, "");
+                output= new File("notes/" + validated + ".txt");
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter(output));
+			System.out.println("writing " + text + " to " + validated);
+            writer.write(text);
+            writer.close();
+            output= new File("notes/" + validated + ".html");
+            writer = new BufferedWriter(new FileWriter(output));
+            writer.write(html);
+            writer.close();
+        }
+        catch(IOException io_exc){
+            System.out.println(io_exc);
+        }
+
+    }
+    private static String saveDocument(TextArea dText, TextField dTitle, boolean saveAll){
         String result = new String();
-        for(noteyDocument document : noteyDocumentArr){
-            if(all || document.getButton().isDisable()){
+        for(NoteyDocument document : noteyDocumentArr){
+            if(saveAll || document.getButton().isDisable()){
+                //If saveAll is true, all documents are saved
                 if(document.getButton().isDisable()){
+                    /*
+                    a button being disabled means its currently selected
+                    the normal text is saved in all cases
+
+                    */
                     document.setNormalText(dText.getText());
-                    if(!dTitle.getText().equals("Document") && !dText.getText().equals("")){
-                        document.setTitle(dTitle.getText());
-                        document.setButtonText(document.getTitle());
-                    }
+                    document.setTitle(dTitle.getText());
+                    document.setButtonText(document.getTitle());
                 }
                 boolean notEmptyDocTitle = !document.getTitle().equals("");
                 document.convertDocumentToHTML();
@@ -82,42 +114,10 @@ public class NoteyController{
                     document.setButtonText(document.getTitle());
                 else
                     continue;
-
                 new File("notes").mkdir();
-                String validChars = "(\\W)";
-                File output;
-				String validated;
-                if(document.getTitle().length()>10){
-					validated = document.getTitle().replaceAll(validChars, "").substring(0, 10);
-                    output= new File("notes/" + validated + ".txt");
-                }
-                else{
-					validated = document.getTitle().replaceAll(validChars, "");
-                    output= new File("notes/" + validated + ".txt");
-                }
-                try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
-					System.out.println("Writing " + document.getNormalText() + " to " + validated);
-                    writer.write(document.getNormalText());
-                }
-                catch(IOException io_exc){
-                    System.out.println(io_exc);
-                }
-                if(document.getTitle().length()>10){
-					validated = document.getTitle().replaceAll(validChars, "").substring(0, 10);
-                    output= new File("notes/" + validated + ".html");
-                }
-                else{
-					validated = document.getTitle().replaceAll(validChars, "");
-                    output= new File("notes/" + document.getTitle().replaceAll(validChars, "") + ".html");
-                }
-                try(BufferedWriter writer =  new BufferedWriter(new FileWriter(output))){
-                    writer.write(document.getHTMLText());
-                }
-                catch(IOException io_exc){
-                    System.out.println(io_exc);
-                }
-                if(!all)
-                    result = document.getHTMLText();
+                writeTextAndHTMLToFile(document.getNormalText(), document.getHTMLText(),
+                    document.getTitle());
+                result = document.getHTMLText();
             }
         }
         return result;
@@ -130,7 +130,7 @@ public class NoteyController{
     }
     private static void searchForDisabledDocumentInArr(TextArea dText, TextField dTitle){
         //Enables any disabled buttons. Should find only one.
-        for(noteyDocument document : noteyDocumentArr){
+        for(NoteyDocument document : noteyDocumentArr){
             if(document.getButton().isDisable()){
                 System.out.println("Enabling");
                 document.toggleButtonDisable();
@@ -159,9 +159,22 @@ public class NoteyController{
         newButton.setPrefWidth(addDocumentButton.getPrefWidth());
         newButton.setMaxWidth(addDocumentButton.getMaxWidth());
         newButton.setOnAction(e -> {
+            setSideButtonsOnClickHandler(documentText, documentTitle, saveButton, saveAllButton,
+            e, title,text, webViewBox);
+        });
+        documentText.setText(text);
+        documentTitle.setText(title);
+        newButton.setText(title);
+        return newButton;
+
+    }
+    private static void setSideButtonsOnClickHandler(TextArea documentText,
+        TextField documentTitle, Button saveButton, Button saveAllButton,
+        ActionEvent click, String title, String text, WebView webViewBox){
             searchForDisabledDocumentInArr(documentText, documentTitle);
             documentTitle.setText(""); //Clears it on each button press
-            if(documentTitle.isDisable() && documentText.isDisable() && saveButton.isDisable()){
+            if(documentTitle.isDisable() && documentText.isDisable() && saveButton.isDisable()
+                && saveAllButton.isDisable()){
                 //Enables the document title box and text box on the first button click
                 documentTitle.setDisable(false);
                 documentText.setDisable(false);
@@ -169,20 +182,20 @@ public class NoteyController{
                 saveAllButton.setDisable(false);
             }
             System.out.println("Clicked");
-            noteyDocument temp = new noteyDocument((Button)e.getSource(), text, "", title);
+            NoteyDocument temp = new NoteyDocument((Button)click.getSource(), text, "", title);
             temp.convertDocumentToHTML();
             int index = noteyDocumentArr.indexOf(temp);
 
             boolean buttonFoundInArray = index > -1;
             if(buttonFoundInArray){
-                noteyDocument tempDocument = noteyDocumentArr.get(index);
-                if(!tempDocument.textEquals("")){
+                temp = noteyDocumentArr.get(index);
+                if(!temp.textEquals("")){
                     System.out.println("button's normal text is not empty.");
-                    System.out.println("button normal text:" + tempDocument.getNormalText());
-                    loadIntoWebView(tempDocument.getHTMLText(), webViewBox);
-                    documentText.setText(tempDocument.getNormalText());
-                    if(!tempDocument.getTitle().equals(""))
-                        documentTitle.setText(tempDocument.getTitle());
+                    System.out.println("button normal text:" + temp.getNormalText());
+                    loadIntoWebView(temp.getHTMLText(), webViewBox);
+                    documentText.setText(temp.getNormalText());
+                    if(!temp.getTitle().equals(""))
+                        documentTitle.setText(temp.getTitle());
                 }
                 else{
                     documentText.setText("");
@@ -199,15 +212,10 @@ public class NoteyController{
                 noteyDocumentArr.add(temp);
                 documentText.setText(text);
                 documentTitle.setText(title);
-                newButton.setText(title);
+                ((Button)click.getSource()).setText(title);
                 System.out.println("Not found");
             }
             temp.toggleButtonDisable();
-        });
-        documentText.setText(text);
-        documentTitle.setText(title);
-        newButton.setText(title);
-        return newButton;
 
     }
     public void addDocument(ActionEvent event){
@@ -224,26 +232,23 @@ public class NoteyController{
         for(String note : notes){
             //System.out.println(note.substring(note.length() - 4, note.length()));
             System.out.println(note);
-            if(note.substring(note.length() - 4, note.length()).equals(".txt")){
+            String fileExtension = note.substring(note.length() - 4, note.length());
+            if(fileExtension.equals(".txt")){
                 System.out.println("In here");
                 File inputFile = new File("notes/" + note);
                 try(BufferedReader reader = new BufferedReader(new FileReader(inputFile))){
                     String text = new String();
                     String title = inputFile.getName();
-					if(title.substring(title.length() - 5, title.length()).equals(".html")){
-						title = title.substring(0, title.length() - 5);
-					}
-					else if(title.substring(title.length() - 4, title.length()).equals(".txt")){
-						title = title.substring(0, title.length() - 4);
-					}
-					System.out.println("New title: " + title);
+                    String titleWithoutExtension = title.substring(0, title.length() - 4);
+					System.out.println("New title: " + titleWithoutExtension);
                     String line;
                     while((line = reader.readLine()) != null){
                         text+=line + System.getProperty("line.separator");
                     }
                     System.out.println(text);
                     Button newButton = setUpNoteyButton(documentText, documentTitle,
-                    addDocumentButton, saveButton, saveAllButton, webViewBox, text, title);
+                        addDocumentButton, saveButton, saveAllButton, webViewBox, text,
+                        titleWithoutExtension);
                     sideButtonHolder.getChildren().add(newButton);
                 }
                 catch(IOException io_exc){

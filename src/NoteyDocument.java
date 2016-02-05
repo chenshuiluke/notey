@@ -3,19 +3,19 @@ package notey;
 import javafx.scene.control.Button;
 
 //An array of this is preferrable to an overlycomplicated map
-public class noteyDocument{
+public class NoteyDocument{
     private Button button;
     private String normalText;
     private String htmlText;
     private String title;
 
-    public noteyDocument(){
+    public NoteyDocument(){
         button = null;
         normalText = "";
         htmlText = "";
         title = "";
     }
-    public noteyDocument(Button button, String normalText, String htmlText, String title){
+    public NoteyDocument(Button button, String normalText, String htmlText, String title){
         this.button = button;
         this.normalText = normalText;
         this.htmlText = htmlText;
@@ -58,8 +58,8 @@ public class noteyDocument{
     }
     public boolean equals(Object other){
         boolean result = false;
-        if(other instanceof noteyDocument){
-            noteyDocument that = (noteyDocument) other;
+        if(other instanceof NoteyDocument){
+            NoteyDocument that = (NoteyDocument) other;
             result = this.getButton() == that.getButton();
                 /*
                 &&
